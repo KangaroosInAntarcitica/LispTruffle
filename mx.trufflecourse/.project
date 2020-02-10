@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+  <name>mx.trufflecourse</name>
+  <comment/>
+  <projects>
+    <project>mx</project>
+    <project>mx.truffle</project>
+    <project>mx.sdk</project>
+    <project>mx.compiler</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.python.pydev.PyDevBuilder</name>
+      <arguments/>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.python.pydev.pythonNature</nature>
+  </natures>
+</projectDescription>

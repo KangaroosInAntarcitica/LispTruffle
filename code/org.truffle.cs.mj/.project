@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>org.truffle.cs.mj</name>
+	<comment></comment>
+	<projects>
+		<project>com.oracle.truffle.api.jdk8</project>
+		<project>org.graalvm.collections</project>
+		<project>org.graalvm.word</project>
+		<project>org.graalvm.options</project>
+		<project>org.graalvm.nativeimage</project>
+		<project>org.graalvm.home</project>
+		<project>org.graalvm.polyglot</project>
+		<project>com.oracle.truffle.api</project>
+		<project>com.oracle.truffle.api.dsl</project>
+		<project>com.oracle.truffle.api.profiles</project>
+		<project>com.oracle.truffle.api.utilities</project>
+		<project>com.oracle.truffle.api.library</project>
+		<project>com.oracle.truffle.api.interop</project>
+		<project>com.oracle.truffle.api.instrumentation</project>
+		<project>com.oracle.truffle.polyglot</project>
+		<project>com.oracle.truffle.api.debug</project>
+		<project>com.oracle.truffle.api.object</project>
+		<project>com.oracle.truffle.object</project>
+		<project>com.oracle.truffle.api.object.dsl</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments></arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+</projectDescription>

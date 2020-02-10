@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src_gen"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.oracle.truffle.api.jdk8"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.graalvm.collections"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.graalvm.word"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.graalvm.options"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.graalvm.nativeimage"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.graalvm.home"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.graalvm.polyglot"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.oracle.truffle.api"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.oracle.truffle.api.dsl"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.oracle.truffle.api.profiles"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.oracle.truffle.api.utilities"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.oracle.truffle.api.library"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.oracle.truffle.api.interop"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.oracle.truffle.api.instrumentation"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.oracle.truffle.polyglot"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.oracle.truffle.api.debug"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.oracle.truffle.api.object"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.oracle.truffle.object"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.oracle.truffle.api.object.dsl"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

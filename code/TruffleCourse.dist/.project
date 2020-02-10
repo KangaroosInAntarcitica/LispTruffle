@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>TruffleCourse</name>
+	<comment>Updates /home/mrs/compilers/Source/trufflecourse/dists/trufflecourse.jar if a project dependency of TruffleCourse is updated</comment>
+	<projects>
+		<project>org.truffle.cs.mj</project>
+		<project>org.truffle.cs.samples</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
+			<triggers>auto,full,incremental,</triggers>
+			<arguments>
+				<dictionary>
+					<key>LaunchConfigHandle</key>
+					<value>&lt;project&gt;/.externalToolBuilders/CreateTruffleCourseDist.launch</value>
+				</dictionary>
+				<dictionary>
+					<key>incclean</key>
+					<value>true</value>
+				</dictionary>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>trufflecourse.jar</name>
+			<type>1</type>
+			<location>PARENT-2-PROJECT_LOC/dists/trufflecourse.jar</location>
+		</link>
+	</linkedResources>
+</projectDescription>
