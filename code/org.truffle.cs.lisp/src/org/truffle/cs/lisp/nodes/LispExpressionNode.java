@@ -1,11 +1,10 @@
 package org.truffle.cs.lisp.nodes;
 
-import com.oracle.truffle.api.frame.FrameDescriptor;
-import com.oracle.truffle.api.nodes.RootNode;
+import com.oracle.truffle.api.frame.VirtualFrame;
+import com.oracle.truffle.api.nodes.Node;
+import com.oracle.truffle.api.nodes.NodeInfo;
 
-public abstract class LispExpressionNode extends RootNode {
-	
-	protected LispExpressionNode(FrameDescriptor frameDescriptor) {
-		super(null, frameDescriptor);
-	}
+@NodeInfo
+public abstract class LispExpressionNode extends Node {
+	public abstract Object execute(VirtualFrame frame);
 }

@@ -16,7 +16,7 @@ public class LispRuntime {
         parseRD(SimpleProgram);
     }
 
-    static String SimpleProgram = "( + 1 )";
+    static String SimpleProgram = "(+ 1 1 2)";
 
     static void parseRD(String code) {
         InputStream is = new ByteArrayInputStream(code.getBytes());
@@ -26,6 +26,6 @@ public class LispRuntime {
         TruffleRuntime runtime = Truffle.getRuntime();
         System.out.println("Calling main function...");
         CallTarget callTarget = runtime.createCallTarget(parser.getRootNode());
-        System.out.println(callTarget.call(new Object[] {}));
+        System.out.println(callTarget.call());
     }
 }

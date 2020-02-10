@@ -16,11 +16,20 @@ import com.oracle.truffle.api.TruffleRuntime;
 public class MJRuntime {
 
     public static void main(String[] args) {
-        parseRD(mjProgramRD);
-        parseRD(whileLoopRD);
-        parseRD(ifProgram);
-        parseRDBenchmark(divAlgorithm);
+//        parseRD(mjProgramRD);
+//        parseRD(whileLoopRD);
+//        parseRD(ifProgram);
+//        parseRDBenchmark(divAlgorithm);
+
+        parseRD(Simplest);
     }
+
+    static String Simplest = "" //
+        + "program Sample { \n"
+        + "void main(int a) {\n" +
+            "print(2);\n" +
+            "} \n"
+        + "}";
 
     static String mjProgramRD = ""//
                     + "program Sample { "//
@@ -113,8 +122,9 @@ public class MJRuntime {
         TruffleRuntime runtime = Truffle.getRuntime();
         System.out.println("Calling main function...");
         CallTarget callTarget = runtime.createCallTarget(parser.getMain());
-        for (int i = 0; i < 100; i++) {
-            callTarget.call();
+
+        for (int i = 0; i < 1000; i++) {
+            callTarget.call(i);
         }
     }
 
@@ -130,21 +140,21 @@ public class MJRuntime {
         Random r = new Random(17);
 
         long start = System.currentTimeMillis();
-        callTarget.call(123123, -12312312);
+//        callTarget.call(123123, -12312312);
         long initialTimeNeeded = (System.currentTimeMillis() - start);
         System.out.println("Time needed " + initialTimeNeeded);
 
         // warmup
-        for (int i = 0; i < 100; i++) {
-            callTarget.call(i, i % 2 == 0 ? -i : i);
-            callTarget.call(i % 2 == 0 ? -i : i, i);
-        }
+//        for (int i = 0; i < 100; i++) {
+//            callTarget.call(i, i % 2 == 0 ? -i : i);
+//            callTarget.call(i % 2 == 0 ? -i : i, i);
+//        }
         for (int i = 0; i < 1000; i++) {
-            callTarget.call(i, r.nextInt(1000));
+            callTarget.call(i);
         }
         System.out.println("#################################################################");
         start = System.currentTimeMillis();
-        callTarget.call(123123, -12312312);
+//        callTarget.call(123123, -12312312);
         System.out.println("Time needed " + (System.currentTimeMillis() - start) + "  | vs initial time=" + initialTimeNeeded);
         System.out.println("#################################################################");
     }

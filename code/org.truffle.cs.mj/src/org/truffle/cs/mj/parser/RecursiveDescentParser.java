@@ -35,6 +35,11 @@ import static org.truffle.cs.mj.parser.Token.Kind.times;
 import static org.truffle.cs.mj.parser.Token.Kind.void_;
 import static org.truffle.cs.mj.parser.Token.Kind.while_;
 
+import org.truffle.cs.mj.nodes.MJPrintNodeGen;
+import org.truffle.cs.mj.nodes.MJConstantIntNodeGen;
+import org.truffle.cs.mj.nodes.MJBinaryNodeFactory;
+import org.truffle.cs.mj.nodes.MJVariableNodeFactory;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,7 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.truffle.cs.mj.nodes.MJFunction;
+import org.truffle.cs.mj.nodes.*;
 
 import com.oracle.truffle.api.CallTarget;
 import com.oracle.truffle.api.frame.FrameDescriptor;
@@ -328,6 +333,15 @@ public final class RecursiveDescentParser {
 
     public Map<String, FrameSlot> slots = new HashMap<>();
 
+    public MJStatementNode createLocalVarWrite(String name, MJExpressionNode value) {
+        FrameSlot frameSlot = slots.get(name);
+        if (frameSlot == null) {
+            frameSlot = currentFrameDescriptor.addFrameSlot(name);
+            slots.put(name, frameSlot);
+        }
+        return MJVariableNodeFactory.MJWriteLocalVariableNodeGen.create(value, frameSlot);
+    }
+
     public List<MJFunction> functions = new ArrayList<>();
 
     public HashMap<MJFunction, CallTarget> callAble = new HashMap<MJFunction, CallTarget>();
@@ -354,6 +368,7 @@ public final class RecursiveDescentParser {
 
     private MJFunction MethodDecl() {
         currentFrameDescriptor = new FrameDescriptor();
+
         if (sym == ident) {
             Type();
         } else if (sym == void_) {
@@ -363,7 +378,7 @@ public final class RecursiveDescentParser {
         }
         check(ident);
         String name = t.str;
-        currentFun = new MJFunction(name, currentFrameDescriptor);
+
         check(lpar);
         if (sym == ident) {
             parameterNames = FormPars();
@@ -372,7 +387,9 @@ public final class RecursiveDescentParser {
         while (sym == ident) {
             VarDecl();
         }
-        Block();
+
+        MJStatementNode block = Block();
+        currentFun = new MJFunction(name, block, currentFrameDescriptor);
         functions.add(currentFun);
         parameterNames = null;
         return currentFun;
@@ -403,20 +420,26 @@ public final class RecursiveDescentParser {
     }
 
     /** Block = "{" { Statement } "}" . */
-    private void Block() {
+    private MJStatementNode Block() {
         check(lbrace);
-        Statements();
+        List<MJStatementNode> statements = Statements();
         check(rbrace);
+        MJBlock currentBlockOfStatements = new MJBlock(statements.toArray(new MJStatementNode[statements.size()]));
+        return currentBlockOfStatements;
     }
 
-    private void Statements() {
+    private List<MJStatementNode> Statements() {
+        List<MJStatementNode> statements = new ArrayList<>();
+
         for (;;) {
             if (firstStat.contains(sym)) {
-                Statement();
+                statements.add(Statement());
             } else {
                 break;
             }
         }
+
+        return statements;
     }
 
     /**
@@ -431,7 +454,9 @@ public final class RecursiveDescentParser {
      * | Block <br>
      * | ";" .
      */
-    private void Statement() {
+    private MJStatementNode Statement() {
+        MJStatementNode currentlyParsedStatement = null;
+
         switch (sym) {
             // ----- assignment, method call, in- or decrement
             // ----- Designator ( Assignop Expr | ActPars | "++" | "--" ) ";"
@@ -440,7 +465,7 @@ public final class RecursiveDescentParser {
                 switch (sym) {
                     case assign:
                         Assignop();
-                        Expr();
+                        currentlyParsedStatement = createLocalVarWrite(des, Expr());
                         break;
                     case plusas:
                     case minusas:
@@ -516,13 +541,15 @@ public final class RecursiveDescentParser {
             case print:
                 scan();
                 check(lpar);
-                Expr();
+                MJExpressionNode expr = Expr();
                 if (sym == comma) {
                     scan();
                     check(number);
                 }
                 check(rpar);
                 check(semicolon);
+
+                currentlyParsedStatement = MJPrintNodeGen.create(expr);
                 break;
             case lbrace:
                 Block();
@@ -533,6 +560,8 @@ public final class RecursiveDescentParser {
             default:
                 throw new Error("Invalid start...");
         }
+
+        return currentlyParsedStatement;
     }
 
     /** ActPars = "(" [ Expr { "," Expr } ] ")" . */
@@ -599,43 +628,50 @@ public final class RecursiveDescentParser {
     }
 
     /** Expr = [ "-" ] Term { Addop Term } . */
-    private void Expr() {
+    private MJExpressionNode Expr() {
+        MJExpressionNode expr = null;
+
         boolean neg = false;
         if (sym == minus) {
             scan();
             neg = true;
         }
-        Term();
+        expr = Term();
         while (sym == plus || sym == minus) {
             if (sym == plus) {
                 Addop();
-                Term();
+                expr = MJBinaryNodeFactory.AddNodeGen.create(expr, Term());
             } else if (sym == minus) {
                 Addop();
-                Term();
+                expr = MJBinaryNodeFactory.SubNodeGen.create(expr, Term());
             }
         }
+        return expr;
     }
 
     /** Term = Factor { Mulop Factor } . */
-    private void Term() {
-        Factor();
+    private MJExpressionNode Term() {
+        MJExpressionNode expr = Factor();
         while (sym == times || sym == slash || sym == rem) {
-            Mulop();
+//            Mulop();
             switch (sym) {
                 case times:
-                    Factor();
+                    scan();
+                    expr = MJBinaryNodeFactory.MulNodeGen.create(expr, Factor());
                     break;
                 case slash:
+                    scan();
                     Factor();
                     break;
                 case rem:
+                    scan();
                     Factor();
                     break;
                 default:
                     break;
             }
         }
+        return expr;
     }
 
     /**
@@ -646,24 +682,33 @@ public final class RecursiveDescentParser {
      * | "new" ident [ "[" Expr "]" ] <br>
      * | "(" Expr ")" .
      */
-    private void Factor() {
+    private MJExpressionNode Factor() {
+        MJExpressionNode expr = null;
+
         switch (sym) {
             case abs:
                 scan();
                 check(lpar);
                 Expr();
                 check(rpar);
-                return;
+                break;
             case ident:
                 String varname = Designator();
                 if (sym == lpar) {
                     ActPars();
                 } else {
-                    // normal variable node
+                    int index = parameterNames.indexOf(varname);
+                    if (index >= 0) {
+                        // parameter
+                        return new MJReadParameterNode(index);
+                    } else {
+                        expr = MJVariableNodeFactory.MJReadLocalVariableNodeGen.create(slots.get(varname));
+                    }
                 }
                 break;
             case number:
                 scan();
+                expr = MJConstantIntNodeGen.create(t.val);
                 break;
             case charConst:
                 scan();
@@ -685,6 +730,8 @@ public final class RecursiveDescentParser {
             default:
                 throw new Error("Invalid fact");
         }
+
+        return expr;
     }
 
     /** Designator = ident { "." ident | "[" Expr "]" } . */

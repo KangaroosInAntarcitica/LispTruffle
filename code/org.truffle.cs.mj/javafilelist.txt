@@ -1,5 +1,0 @@
-/home/mrs/compilers/Source/trufflecourse/code/org.truffle.cs.mj/src/org/truffle/cs/mj/main/MJRuntime.java
-/home/mrs/compilers/Source/trufflecourse/code/org.truffle.cs.mj/src/org/truffle/cs/mj/nodes/MJFunction.java
-/home/mrs/compilers/Source/trufflecourse/code/org.truffle.cs.mj/src/org/truffle/cs/mj/parser/RecursiveDescendScanner.java
-/home/mrs/compilers/Source/trufflecourse/code/org.truffle.cs.mj/src/org/truffle/cs/mj/parser/RecursiveDescentParser.java
-/home/mrs/compilers/Source/trufflecourse/code/org.truffle.cs.mj/src/org/truffle/cs/mj/parser/Token.java

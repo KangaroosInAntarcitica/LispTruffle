@@ -1,29 +1,12 @@
 package org.truffle.cs.lisp.parser;
 
-import org.truffle.cs.lisp.nodes.LispIntNode;
-import org.truffle.cs.lisp.nodes.LispListNode;
-import org.truffle.cs.lisp.nodes.LispPlusNode;
+import org.truffle.cs.lisp.nodes.*;
 
 import com.oracle.truffle.api.frame.FrameDescriptor;
 
-import static org.truffle.cs.lisp.parser.Token.Kind.atom;
-import static org.truffle.cs.lisp.parser.Token.Kind.car;
-import static org.truffle.cs.lisp.parser.Token.Kind.cdr;
-import static org.truffle.cs.lisp.parser.Token.Kind.charConst;
-import static org.truffle.cs.lisp.parser.Token.Kind.cons;
-import static org.truffle.cs.lisp.parser.Token.Kind.eof;
-import static org.truffle.cs.lisp.parser.Token.Kind.eq;
-import static org.truffle.cs.lisp.parser.Token.Kind.ident;
-import static org.truffle.cs.lisp.parser.Token.Kind.if_;
-import static org.truffle.cs.lisp.parser.Token.Kind.lpar;
-import static org.truffle.cs.lisp.parser.Token.Kind.minus;
-import static org.truffle.cs.lisp.parser.Token.Kind.number;
-import static org.truffle.cs.lisp.parser.Token.Kind.period;
-import static org.truffle.cs.lisp.parser.Token.Kind.plus;
-import static org.truffle.cs.lisp.parser.Token.Kind.rem;
-import static org.truffle.cs.lisp.parser.Token.Kind.rpar;
-import static org.truffle.cs.lisp.parser.Token.Kind.slash;
-import static org.truffle.cs.lisp.parser.Token.Kind.times;
+import static org.truffle.cs.lisp.parser.Token.Kind.*;
+
+import java.util.ArrayList;
 
 public final class RecursiveDescentParser {
     /** Maximum number of global variables per program */
@@ -69,39 +52,45 @@ public final class RecursiveDescentParser {
         }
     }
     
-    private LispListNode rootList;
+    private LispRootNode rootNode;
     
-    public LispListNode getRootNode() {
-    	return rootList;
+    public LispRootNode getRootNode() {
+    	return rootNode;
     }
     
-    private LispListNode readList(FrameDescriptor frame) {
-    	LispListNode list = new LispListNode(frame);
+    private LispCallableListNode readCallableList() {
+    	ArrayList<LispExpressionNode> expressions = new ArrayList<LispExpressionNode>();
+    	
     	while (sym != rpar) {
     		switch (sym) {
     			case plus:
-    				LispPlusNode plusNode = new LispPlusNode(frame);
-    				list.addElement(plusNode);
+    				System.out.println("plus");
+    				LispArithmeticNode plusNode = new LispArithmeticNode.LispPlusNode();
+    				expressions.add(plusNode);
     				break;
     			case number:
-    				LispIntNode intNode = new LispIntNode(frame, t.val);
-    				list.addElement(intNode);
+    				System.out.println("number");
+    				LispIntNode intNode = new LispIntNode(t.val);
+    				expressions.add(intNode);
     				break;
     			case lpar:
-    				LispListNode listNode = readList(frame);
-    				list.addElement(listNode);
+    				System.out.println("end");
+    				LispCallableListNode listNode = readCallableList();
+    				expressions.add(listNode);
     				break;
 				default:
 					throw new Error("Unknown symbol");
     		}
     		scan();
     	}
-    	return list;
+    	
+    	return new LispCallableListNode(expressions);
     }
     
     public void parse() {
         scan(); // scan first symbol
         check(lpar);
-        rootList = readList(null);
+        FrameDescriptor descriptor = new FrameDescriptor();
+        rootNode = new LispRootNode(readCallableList(), descriptor);
     }
 }
