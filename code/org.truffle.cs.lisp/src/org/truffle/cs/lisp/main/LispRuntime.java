@@ -16,7 +16,7 @@ public class LispRuntime {
         parseRD(SimpleProgram);
     }
 
-    static String SimpleProgram = "(+ 1 1 2)";
+    static String SimpleProgram = "(+ 1 1 23 (* 2 3))";
 
     static void parseRD(String code) {
         InputStream is = new ByteArrayInputStream(code.getBytes());

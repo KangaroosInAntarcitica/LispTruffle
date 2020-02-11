@@ -64,24 +64,38 @@ public final class RecursiveDescentParser {
     	while (sym != rpar) {
     		switch (sym) {
     			case plus:
-    				System.out.println("plus");
-    				LispArithmeticNode plusNode = new LispArithmeticNode.LispPlusNode();
-    				expressions.add(plusNode);
+    				scan();
+    				LispArithmeticNode addNode = new LispArithmeticNode.LispAddNode();
+    				expressions.add(addNode);
+    				break;
+    			case minus:
+    				scan();
+    				LispArithmeticNode subtractNode = new LispArithmeticNode.LispSubtractNode();
+    				expressions.add(subtractNode);
+    				break;
+    			case times:
+    				scan();
+    				LispArithmeticNode multiplyNode = new LispArithmeticNode.LispMultiplyNode();
+    				expressions.add(multiplyNode);
+    				break;
+    			case slash:
+    				scan();
+    				LispArithmeticNode divideNode = new LispArithmeticNode.LispDivideNode();
+    				expressions.add(divideNode);
     				break;
     			case number:
-    				System.out.println("number");
+    				scan();
     				LispIntNode intNode = new LispIntNode(t.val);
     				expressions.add(intNode);
     				break;
     			case lpar:
-    				System.out.println("end");
+    				scan();
     				LispCallableListNode listNode = readCallableList();
     				expressions.add(listNode);
     				break;
 				default:
 					throw new Error("Unknown symbol");
     		}
-    		scan();
     	}
     	
     	return new LispCallableListNode(expressions);
