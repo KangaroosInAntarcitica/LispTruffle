@@ -26,6 +26,10 @@ public class LispRuntime {
         TruffleRuntime runtime = Truffle.getRuntime();
         System.out.println("Calling main function...");
         CallTarget callTarget = runtime.createCallTarget(parser.getRootNode());
+        
+        for (int i = 0; i < 10_000; i++) {
+        	callTarget.call();
+        }
         System.out.println(callTarget.call());
     }
 }

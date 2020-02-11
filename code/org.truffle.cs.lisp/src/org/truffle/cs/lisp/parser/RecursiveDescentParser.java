@@ -7,6 +7,7 @@ import com.oracle.truffle.api.frame.FrameDescriptor;
 import static org.truffle.cs.lisp.parser.Token.Kind.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public final class RecursiveDescentParser {
     /** Maximum number of global variables per program */
@@ -98,7 +99,9 @@ public final class RecursiveDescentParser {
     		}
     	}
     	
-    	return new LispCallableListNode(expressions);
+    	List<LispExpressionNode> argumentsList = expressions.subList(1, expressions.size());
+    	LispExpressionNode arguments[] = argumentsList.toArray(new LispExpressionNode[argumentsList.size()]);
+    	return new LispCallableListNode(expressions.get(0), arguments);
     }
     
     public void parse() {

@@ -8,20 +8,20 @@ import com.oracle.truffle.api.frame.FrameDescriptor;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
 public class LispCallableListNode extends LispExpressionNode {
-	@Child LispOperationNode function;
+	@Child LispOperationNode operation;
 	
-	public LispCallableListNode(ArrayList<LispExpressionNode> expressions) {
-		if (expressions.get(0) instanceof LispOperationNode){
-			this.function = (LispOperationNode) expressions.get(0);
-			this.function.setArguments(expressions.subList(1, expressions.size()));
+	public LispCallableListNode(LispExpressionNode operation, LispExpressionNode arguments[]) {
+		if (operation instanceof LispOperationNode){
+			this.operation = (LispOperationNode) operation;
+			this.operation.setArguments(arguments);
 		} else {
 			CompilerDirectives.transferToInterpreter();
-			throw new Error(expressions.get(0) + " must be an operations.");
+			throw new Error(operation + " must be an operations.");
 		}
 	}
 	
 	@Override
 	public Object execute(VirtualFrame frame) {
-		return function.execute(frame);
+		return operation.execute(frame);
 	}
 }

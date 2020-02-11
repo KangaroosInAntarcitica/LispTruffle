@@ -5,11 +5,12 @@ import com.oracle.truffle.api.frame.FrameDescriptor;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
 public abstract class LispOperationNode extends LispExpressionNode {
-	protected List<LispExpressionNode> arguments;
+	@Children 
+	protected LispExpressionNode arguments[];
 	
 	public LispOperationNode() {}
 	
-	public void setArguments(List<LispExpressionNode> arguments) {
+	public void setArguments(LispExpressionNode arguments[]) {
 		this.arguments = arguments;
 	}
 }
