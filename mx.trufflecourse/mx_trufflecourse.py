@@ -16,24 +16,6 @@ def getClasspathOptions(extra_dists=None):
     """gets the classpath of the Sulong distributions"""
     return mx.get_runtime_jvm_args((extra_dists or []))
 
-def runPlainAST(args=None, out=None, get_classpath_options=getClasspathOptions):
-    dists = ["TruffleCourse"]
-    return mx.run_java(get_classpath_options(dists) + ["-XX:+EnableJVMCI","-XX:+UseJVMCICompiler"] + 
-    args+ ["org.truffle.cs.samples.PlainAST.PlainAST"], out=out,jdk=mx.get_jdk())
-
-def runMJInterpreter(args=None, out=None, get_classpath_options=getClasspathOptions):
-    dists = ["TruffleCourse"]
-    return mx.run_java(get_classpath_options(dists) + [
-        "-XX:+EnableJVMCI",
-        "-XX:+UseJVMCICompiler",
-        "-Dgraal.TraceTruffleCompilation=true",
-        # "-Dgraal.TruffleCompileImmediately=true",
-        "-Dgraal.TruffleBackgroundCompilation=false",
-        "-Dgraal.PrintGraph=Network",
-        "-Dgraal.Dump=Truffle:9"
-        ] + 
-    args+ ["org.truffle.cs.mj.main.MJRuntime"], out=out,jdk=mx.get_jdk())
-
 def runLISPInterpreter(args=None, out=None, get_classpath_options=getClasspathOptions):
     dists = ["TruffleCourse"]
     return mx.run_java(get_classpath_options(dists) + [
@@ -47,17 +29,6 @@ def runLISPInterpreter(args=None, out=None, get_classpath_options=getClasspathOp
         ] + 
     args+ ["org.truffle.cs.lisp.main.LispRuntime"], out=out,jdk=mx.get_jdk())
 
-def runPESamples(args=None, out=None, get_classpath_options=getClasspathOptions):
-    dists = ["TruffleCourse"]
-    return mx.run_java(get_classpath_options(dists) + ["-XX:+EnableJVMCI",
-    "-XX:+UseJVMCICompiler","-Dgraal.TraceTruffleCompilation=true",
-    "-Dgraal.TruffleCompileImmediately=true",
-    "-Dgraal.TruffleBackgroundCompilation=false"] + args+ ["org.truffle.cs.samples.SimplestPEA"], out=out,jdk=mx.get_jdk())
-
-
 mx.update_commands(_suite, {
-    'peSamples' : [runPESamples, ''],
-    'mjInterpreter' : [runMJInterpreter, ''],
-    'lispInterpreter' : [runLISPInterpreter, ''],
-    'plainAST' : [runPlainAST,'']
+    'lispInterpreter' : [runLISPInterpreter, '']
 })

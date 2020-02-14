@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<factorypath>
-	<factorypathentry enabled="true" id="org.eclipse.jst.ws.annotations.core" kind="PLUGIN" runInBatchMode="false"/>
-	<factorypathentry enabled="true" id="/home/mrs/.mx/cache/ANTLR4_e27d8ab4f984f9d186f54da984a6ab1cccac755e/antlr4.jar" kind="EXTJAR" runInBatchMode="false"/>
-	<factorypathentry enabled="true" id="/TRUFFLE_DSL_PROCESSOR/truffle-dsl-processor.jar" kind="WKSPJAR" runInBatchMode="false"/>
-</factorypath>

@@ -1,5 +1,0 @@
-logToConsole=False
-absolutePaths=False
-EXTRA_JAVA_HOMES=None
-PATH=/home/mrs/git/simulation/install/bin:/opt/ros/melodic/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
-JAVA_HOME=../openjdk1.8.0_232-jvmci-19.3-b06

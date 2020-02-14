@@ -1,6 +1,14 @@
 *javafilelist.txt
-*dists/
-*graal_dumps/
-*.pyc
-*bin/
+*.project
+dists/
+graal_dumps/
+workingsets.xml
+code/org.truffle.cs.lisp/bin/
+code/org.truffle.cs.lisp/.classpath
+code/org.truffle.cs.lisp/.org.truffle.cs.lisp.iml
+mx.trufflecourse/.pydevproject
+mx.trufflecourse/currentAnnotationProcessors/
+mx.trufflecourse/savedDeps/
+mx.trufflecourse/eclipse-*
+mx.trufflecourse/*.pyc
 
