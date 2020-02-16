@@ -60,47 +60,32 @@ public final class RecursiveDescentParser {
     }
     
     private LispCallableListNode readCallableList() {
+        check(lpar);
     	ArrayList<LispExpressionNode> expressions = new ArrayList<LispExpressionNode>();
     	
     	while (sym != rpar) {
     		if (sym == plus || sym == minus || sym == times || sym == slash) {
-    			scan();
-    			switch(sym)
-
+    			LispArithmeticNode node = null;
+    			switch(sym) {
+					case plus: node = new LispArithmeticNode.LispAddNode(); break;
+					case minus: node = new LispArithmeticNode.LispSubtractNode(); break;
+					case times: node = new LispArithmeticNode.LispMultiplyNode(); break;
+					case slash: node = new LispArithmeticNode.LispDivideNode(); break;
+				}
+				expressions.add(node);
+                scan();
 			}
-    		switch (sym) {
-    			case plus:
-    				scan();
-    				LispArithmeticNode addNode = new LispArithmeticNode.LispAddNode();
-    				expressions.add(addNode);
-    				break;
-    			case minus:
-    				scan();
-    				LispArithmeticNode subtractNode = new LispArithmeticNode.LispSubtractNode();
-    				expressions.add(subtractNode);
-    				break;
-    			case times:
-    				scan();
-    				LispArithmeticNode multiplyNode = new LispArithmeticNode.LispMultiplyNode();
-    				expressions.add(multiplyNode);
-    				break;
-    			case slash:
-    				scan();
-    				LispArithmeticNode divideNode = new LispArithmeticNode.LispDivideNode();
-    				expressions.add(divideNode);
-    				break;
-    			case number:
-    				scan();
-    				LispIntNode intNode = new LispIntNode(t.val);
-    				expressions.add(intNode);
-    				break;
-    			case lpar:
-    				scan();
-    				LispCallableListNode listNode = readCallableList();
-    				expressions.add(listNode);
-    				break;
-				default:
-					throw new Error("Unknown symbol");
+    		else if (sym == number) {
+                scan();
+                LispIntNode intNode = new LispIntNode(t.val);
+                expressions.add(intNode);
+            }
+    		else if (sym == lpar) {
+                LispCallableListNode listNode = readCallableList();
+                expressions.add(listNode);
+            }
+    		else {
+    		    throw new Error("Unknown symbol");
     		}
     	}
     	check(rpar);
@@ -114,7 +99,6 @@ public final class RecursiveDescentParser {
     
     public void parse() {
         scan(); // scan first symbol
-        check(lpar);
         FrameDescriptor descriptor = new FrameDescriptor();
         rootNode = new LispRootNode(readCallableList(), descriptor);
         check(eof);

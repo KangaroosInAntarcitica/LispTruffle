@@ -16,6 +16,7 @@ public class LispCallableListNode extends LispExpressionNode {
 			this.operation.setArguments(arguments);
 		} else {
 			CompilerDirectives.transferToInterpreter();
+			if (operation == null) throw new Error("Operation cannot be nil.");
 			throw new Error(operation + " must be an operations.");
 		}
 	}
