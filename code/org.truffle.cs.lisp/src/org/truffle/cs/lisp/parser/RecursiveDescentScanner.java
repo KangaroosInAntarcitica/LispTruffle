@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.truffle.cs.lisp.parser.Token.Kind;
 
+import jdk.nashorn.internal.parser.TokenKind;
+
 public final class RecursiveDescentScanner {
     protected static final char EOF = (char) -1;
     protected static final char LF = '\n';
@@ -42,7 +44,7 @@ public final class RecursiveDescentScanner {
         nextCh(); // read 1st char into ch, incr col to 1
 
         Kind[] keys = {
-                Token.Kind.nil, Token.Kind.period,
+                Token.Kind.nil, Token.Kind.period, Token.Kind.true_, Token.Kind.false_,
                 Token.Kind.plus, Token.Kind.minus, Token.Kind.times, Token.Kind.slash,
                 Token.Kind.equal, Token.Kind.notEqual, Token.Kind.greater, Token.Kind.greaterEqual, Token.Kind.less, Token.Kind.lessEqual,
                 Token.Kind.assign, Token.Kind.if_,

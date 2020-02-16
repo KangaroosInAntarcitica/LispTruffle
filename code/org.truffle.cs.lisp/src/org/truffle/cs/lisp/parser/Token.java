@@ -17,6 +17,8 @@ public class Token {
         number("__number__"),
         ident("__identifier__"),
         nil("nil"),
+        true_("TRUE"),
+        false_("FALSE"),
 
         period("."),
         plus("+"),

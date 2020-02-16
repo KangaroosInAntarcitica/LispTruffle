@@ -74,7 +74,22 @@ public final class RecursiveDescentParser {
 				}
 				expressions.add(node);
                 scan();
-			}
+            }
+            else if (sym == if_) {
+                scan();
+                LispIfNode ifNode = new LispIfNode();
+                expressions.add(ifNode);
+            }
+            else if (sym == true_) {
+                scan();
+                LispBoolNode.TRUE trueNode = new LispBoolNode.TRUE();
+                expressions.add(trueNode);
+            }
+            else if (sym == false_) {
+                scan();
+                LispBoolNode.FALSE falseNode = new LispBoolNode.FALSE();
+                expressions.add(falseNode);
+            }
     		else if (sym == number) {
                 scan();
                 LispNumberNode numberNode = new LispNumberNode(t.val);
