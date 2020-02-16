@@ -25,7 +25,7 @@ public class Token {
         minus("-"),
         times("*"),
         slash("/"),
-        not("not"), not_("not"),
+        not("!"), not_("not"),
         equal("=="), equal_("eq"),
         notEqual("!="),
         greater(">"),
