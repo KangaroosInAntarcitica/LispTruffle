@@ -5,11 +5,11 @@ import com.oracle.truffle.api.frame.FrameDescriptor;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
 @NodeInfo
-public class LispIntNode extends LispExpressionNode {
+public class LispNumberNode extends LispExpressionNode {
 
-	private final int value;
+	private final float value;
 	
-	public LispIntNode(int value) {
+	public LispNumberNode(float value) {
 		this.value = value;
 	}
 

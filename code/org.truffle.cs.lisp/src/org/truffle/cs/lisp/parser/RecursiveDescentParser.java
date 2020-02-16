@@ -49,7 +49,7 @@ public final class RecursiveDescentParser {
     	if (sym == expected) {
             scan();
         } else {
-            throw new Error("Token " + expected + " excpeted");
+            throw new Error("Token " + expected + " expected");
         }
     }
     
@@ -77,8 +77,8 @@ public final class RecursiveDescentParser {
 			}
     		else if (sym == number) {
                 scan();
-                LispIntNode intNode = new LispIntNode(t.val);
-                expressions.add(intNode);
+                LispNumberNode numberNode = new LispNumberNode(t.val);
+                expressions.add(numberNode);
             }
     		else if (sym == lpar) {
                 LispCallableListNode listNode = readCallableList();

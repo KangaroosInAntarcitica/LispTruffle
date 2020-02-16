@@ -34,28 +34,28 @@ public abstract class LispArithmeticNode extends LispOperationNode {
 	public static class LispAddNode extends LispArithmeticNode {
 		@Override
 		public Object reduce(Object accumulator, Object value) {
-			return (int) accumulator + (int) value;
+			return (float) accumulator + (float) value;
 		}
 	}
 	
 	public static class LispSubtractNode extends LispArithmeticNode {
 		@Override
 		public Object reduce(Object accumulator, Object value) {
-			return (int) accumulator - (int) value;
+			return (float) accumulator - (float) value;
 		}
 	}
 	
 	public static class LispMultiplyNode extends LispArithmeticNode {
 		@Override
 		public Object reduce(Object accumulator, Object value) {
-			return (int) accumulator * (int) value;
+			return (float) accumulator * (float) value;
 		}
 	}
 	
 	public static class LispDivideNode extends LispArithmeticNode {
 		@Override
 		public Object reduce(Object accumulator, Object value) {
-			return (int) accumulator / (int) value;
+			return (float) accumulator / (float) value;
 		}
 	}
 }

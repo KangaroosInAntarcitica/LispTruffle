@@ -18,10 +18,11 @@ public class Token {
         ident("__identifier__"),
         nil("nil"),
 
-		plus("+"),
-		minus("-"),
-		times("*"),
-		slash("/"),
+        period("."),
+        plus("+"),
+        minus("-"),
+        times("*"),
+        slash("/"),
         equal("=="),
         notEqual("!="),
         greater(">"),
@@ -62,7 +63,7 @@ public class Token {
     public final int col;
 
     /** Value of this token (for numbers or character constants). */
-    public int val;
+    public float val;
 
     /** String representation of this token. */
     public String str;

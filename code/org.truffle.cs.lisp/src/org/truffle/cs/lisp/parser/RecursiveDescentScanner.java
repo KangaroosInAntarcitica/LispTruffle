@@ -42,7 +42,7 @@ public final class RecursiveDescentScanner {
         nextCh(); // read 1st char into ch, incr col to 1
 
         Kind[] keys = {
-                Token.Kind.nil,
+                Token.Kind.nil, Token.Kind.period,
                 Token.Kind.plus, Token.Kind.minus, Token.Kind.times, Token.Kind.slash,
                 Token.Kind.equal, Token.Kind.notEqual, Token.Kind.greater, Token.Kind.greaterEqual, Token.Kind.less, Token.Kind.lessEqual,
                 Token.Kind.assign, Token.Kind.if_,
@@ -129,7 +129,7 @@ public final class RecursiveDescentScanner {
         t.kind = Kind.number;
         t.str = sb.toString();
         try {
-            t.val = Integer.parseInt(t.str);
+            t.val = Float.parseFloat(t.str);
         } catch (NumberFormatException nfe) {
             throw new Error("Number too big " + t.str);
         }
@@ -182,6 +182,6 @@ public final class RecursiveDescentScanner {
     }
 
     private boolean isDigit(char c) {
-        return '0' <= c && c <= '9';
+        return '0' <= c && c <= '9' || c == '.';
     }
 }
