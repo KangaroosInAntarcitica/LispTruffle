@@ -34,7 +34,7 @@ public final class RecursiveDescentParser {
     public RecursiveDescentParser(RecursiveDescentScanner scanner) {
         this.scanner = scanner;
         // Avoid crash when 1st symbol has scanner error.
-        la = new Token(Token.Kind.none, 1, 1);
+        la = new Token(Token.Kind.undefined, 1, 1);
     }
 
     /** Reads ahead one symbol. */
@@ -63,6 +63,11 @@ public final class RecursiveDescentParser {
     	ArrayList<LispExpressionNode> expressions = new ArrayList<LispExpressionNode>();
     	
     	while (sym != rpar) {
+    		if (sym == plus || sym == minus || sym == times || sym == slash) {
+    			scan();
+    			switch(sym)
+
+			}
     		switch (sym) {
     			case plus:
     				scan();
@@ -98,9 +103,12 @@ public final class RecursiveDescentParser {
 					throw new Error("Unknown symbol");
     		}
     	}
+    	check(rpar);
     	
     	List<LispExpressionNode> argumentsList = expressions.subList(1, expressions.size());
     	LispExpressionNode arguments[] = argumentsList.toArray(new LispExpressionNode[argumentsList.size()]);
+    	if (argumentsList.size() == 0) 
+    		throw new Error("Callable list shouldn't be empty");
     	return new LispCallableListNode(expressions.get(0), arguments);
     }
     
@@ -109,5 +117,6 @@ public final class RecursiveDescentParser {
         check(lpar);
         FrameDescriptor descriptor = new FrameDescriptor();
         rootNode = new LispRootNode(readCallableList(), descriptor);
+        check(eof);
     }
 }

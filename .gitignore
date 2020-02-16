@@ -11,4 +11,7 @@ mx.trufflecourse/currentAnnotationProcessors/
 mx.trufflecourse/savedDeps/
 mx.trufflecourse/eclipse-*
 mx.trufflecourse/*.pyc
+code/org.truffle.cs.mj/
+code/org.truffle.cs.samples/
+*.iml
 

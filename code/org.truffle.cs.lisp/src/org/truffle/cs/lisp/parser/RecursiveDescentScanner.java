@@ -28,20 +28,26 @@ public final class RecursiveDescentScanner {
     /** Mapping from keyword names to appropriate token codes. */
     private Map<String, Token.Kind> keywords;
 
+    private void setKeywords(Kind[] kinds) {
+        keywords = new HashMap<String, Token.Kind>();
+        for (Kind kind: kinds) {
+            keywords.put(kind.label(), kind);
+        }
+    }
+
     public RecursiveDescentScanner(Reader r) {
-        in = r;
         in = r;
         line = 1;
         col = 0;
-
         nextCh(); // read 1st char into ch, incr col to 1
-        keywords = new HashMap<String, Token.Kind>();
-        keywords.put(Kind.atom.label(), Kind.atom);
-        keywords.put(Kind.eq.label(), Kind.eq);
-        keywords.put(Kind.car.label(), Kind.car);
-        keywords.put(Kind.cdr.label(), Kind.cdr);
-        keywords.put(Kind.cons.label(), Kind.cons);
-        keywords.put(Kind.if_.label(), Kind.if_);
+
+        Kind[] keys = {
+                Token.Kind.nil,
+                Token.Kind.plus, Token.Kind.minus, Token.Kind.times, Token.Kind.slash,
+                Token.Kind.equal, Token.Kind.notEqual, Token.Kind.greater, Token.Kind.greaterEqual, Token.Kind.less, Token.Kind.lessEqual,
+                Token.Kind.assign, Token.Kind.if_,
+        };
+        setKeywords(keys);
     }
 
     /**
@@ -59,7 +65,7 @@ public final class RecursiveDescentScanner {
                     col = 0;
                     break;
                 case EOF: // read returns -1 at end of file
-                    // ch = EOF;
+                    ch = EOF;
                     break;
                 default:
                     col++;
@@ -77,140 +83,35 @@ public final class RecursiveDescentScanner {
         while (Character.isWhitespace(ch)) {
             nextCh(); // skip whitespace
         }
-        // ----- start of new token
-        Token t = new Token(Kind.none, line, col);
+        Token t = new Token(Kind.undefined, line, col);
 
-        switch (ch) {
-            // ----- ident or keyword
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':
-            case 'g':
-            case 'h':
-            case 'i':
-            case 'j':
-            case 'k':
-            case 'l':
-            case 'm':
-            case 'n':
-            case 'o':
-            case 'p':
-            case 'q':
-            case 'r':
-            case 's':
-            case 't':
-            case 'u':
-            case 'v':
-            case 'w':
-            case 'x':
-            case 'y':
-            case 'z':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'G':
-            case 'H':
-            case 'I':
-            case 'J':
-            case 'K':
-            case 'L':
-            case 'M':
-            case 'N':
-            case 'O':
-            case 'P':
-            case 'Q':
-            case 'R':
-            case 'S':
-            case 'T':
-            case 'U':
-            case 'V':
-            case 'W':
-            case 'X':
-            case 'Y':
-            case 'Z':
-                readName(t);
-                break;
-            // ----- number
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-                readNumber(t);
-                break;
-            // ----- character constant
-            case '\'':
-                readCharConst(t);
-                break;
-            // ----- simple tokens
-            case '.':
-                t.kind = Kind.period;
-                nextCh();
-                break;
-            case '(':
-                t.kind = Kind.lpar;
-                nextCh();
-                break;
-            case ')':
-                t.kind = Kind.rpar;
-                nextCh();
-                break;
-            case EOF:
-                t.kind = Kind.eof;
-                break; // NO nextCh()!
-            // ----- compound tokens
-            case '+':
-            	t.kind = Kind.plus;
-                nextCh();
-                break;
-            case '-':
-            	t.kind = Kind.minus;
-                nextCh();
-                break;
-            case '*':
-            	t.kind = Kind.times;
-                nextCh();
-                break;
-            case '/':
-            	t.kind = Kind.slash;
-                nextCh();
-                break;
-            case '%':
-            	t.kind = Kind.rem;
-                nextCh();
-                break;
-            case '=':
-            	t.kind = Kind.eql;
-                nextCh();
-                break;
-            default:
-                throw new Error("Invalid char " + ch);
-                // nextCh();
-                // break;
-        } // end switch
+        if (isDigit(ch)) {
+            readNumber(t);
+        } else if (isKeySymbol(ch)) {
+            switch(ch) {
+                case '(': t.kind = Kind.lpar; break;
+                case ')': t.kind = Kind.rpar; break;
+            }
+            nextCh();
+        } else if (ch == EOF) {
+            t.kind = Kind.eof;
+        } else {
+            readName(t);
+        }
+
         return t;
     }
 
-    /** Reads a name into the <code>Token t</code>. */
     private void readName(Token t) {
         StringBuilder sb = new StringBuilder();
         sb.append(ch);
         nextCh();
-        while (isLetter(ch) || isDigit(ch) || ch == '_') {
+
+        while (ch != EOF && !Character.isWhitespace(ch) && !isKeySymbol(ch)) {
             sb.append(ch);
             nextCh();
         }
+
         t.str = sb.toString();
         if (keywords.containsKey(t.str)) {
             t.kind = keywords.get(t.str);
@@ -219,7 +120,6 @@ public final class RecursiveDescentScanner {
         }
     }
 
-    /** Reads a number into the <code>Token t</code>. */
     private void readNumber(Token t) {
         StringBuilder sb = new StringBuilder();
         do {
@@ -235,6 +135,7 @@ public final class RecursiveDescentScanner {
         }
     }
 
+    /*
     private void readCharConst(Token t) {
         t.kind = Kind.charConst;
         nextCh();
@@ -251,7 +152,7 @@ public final class RecursiveDescentScanner {
                 case 'r':
                     t.val = 13;
                     break;
-                case '\'': /* fall through */
+                case '\'': // fall through
                 case '\\':
                     t.val = ch;
                     break;
@@ -274,9 +175,10 @@ public final class RecursiveDescentScanner {
             }
         }
     }
+    */
 
-    private boolean isLetter(char c) {
-        return 'a' <= c && c <= 'z' || 'A' <= c && c <= 'Z';
+    private boolean isKeySymbol(char c) {
+        return "()".indexOf(c) != -1;
     }
 
     private boolean isDigit(char c) {

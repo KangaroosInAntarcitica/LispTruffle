@@ -8,27 +8,33 @@ public class Token {
     public enum Kind {
 
         // @formatter:off
-		none("none"),
-		ident("identifier"),
-		number("number"),
-		charConst("character constant"),
-		atom("atom"),
-		eq("eq"),
-		car("car"),
-		cdr("cdr"),
-		cons("cons"),
-		eql("="),
+        undefined("undefined"),
+
+        eof("end of file"),
+        lpar("("),
+        rpar(")"),
+
+        number("__number__"),
+        ident("__identifier__"),
+        nil("nil"),
+
 		plus("+"),
 		minus("-"),
 		times("*"),
 		slash("/"),
-		rem("%"),
-		period("."),
-		lpar("("),
-		rpar(")"),
-		if_("if"),
-		eof("end of file");
-		// @formatter:on
+        equal("=="),
+        notEqual("!="),
+        greater(">"),
+        greaterEqual(">="),
+        less("<"),
+        lessEqual("<="),
+
+        assign("="),
+        if_("if");
+
+//        car("car"),
+//        cdr("cdr"),
+//        cons("cons");
 
         private String label;
 
@@ -81,8 +87,6 @@ public class Token {
             result = result + ", str " + str;
         } else if (kind == Kind.number) {
             result = result + ", val " + val;
-        } else if (kind == Kind.charConst) {
-            result = result + ", val '" + (char) val + "'";
         }
         return result;
     }
