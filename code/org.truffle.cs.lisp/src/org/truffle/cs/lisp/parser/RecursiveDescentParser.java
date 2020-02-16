@@ -1,6 +1,7 @@
 package org.truffle.cs.lisp.parser;
 
 import org.truffle.cs.lisp.nodes.*;
+import org.truffle.cs.lisp.parser.Token.Kind;
 
 import com.oracle.truffle.api.frame.FrameDescriptor;
 
@@ -80,15 +81,36 @@ public final class RecursiveDescentParser {
                 LispIfNode ifNode = new LispIfNode();
                 expressions.add(ifNode);
             }
-            else if (sym == true_) {
+            else if (sym == true_ || sym == false_) {
+                LispBoolNode node = null;
+                switch (sym) {
+                    case true_: node = new LispBoolNode.TRUE(); break;
+                    case false_: node = new LispBoolNode.FALSE();
+                }
+                expressions.add(node);
                 scan();
-                LispBoolNode.TRUE trueNode = new LispBoolNode.TRUE();
-                expressions.add(trueNode);
             }
-            else if (sym == false_) {
+            else if (sym == not || sym == not_ || sym == and || sym == and_ || sym == or || sym == or_) {
+                LispConjunctionNode node = null;
+                switch (sym) {
+                    case not: case not_: node = new LispConjunctionNode.NOT(); break;
+                    case and: case and_: node = new LispConjunctionNode.AND(); break;
+                    case or: case or_: node = new LispConjunctionNode.OR(); break;
+                }
+                expressions.add(node);
                 scan();
-                LispBoolNode.FALSE falseNode = new LispBoolNode.FALSE();
-                expressions.add(falseNode);
+            }
+            else if (sym == equal || sym == equal_ || sym == greater || sym == greaterEqual || sym == less || sym == lessEqual) {
+                LispComparisonNode node = null;
+                switch (sym) {
+                    case equal: case equal_: node = new LispComparisonNode.Equal(); break;
+                    case greater: node = new LispComparisonNode.Greater(); break;
+                    case greaterEqual: node = new LispComparisonNode.GreaterEqual(); break;
+                    case less: node = new LispComparisonNode.Less(); break;
+                    case lessEqual: node = new LispComparisonNode.LessEqual(); break;
+                }
+                expressions.add(node);
+                scan();
             }
     		else if (sym == number) {
                 scan();

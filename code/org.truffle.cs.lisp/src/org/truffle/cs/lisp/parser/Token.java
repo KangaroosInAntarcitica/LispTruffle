@@ -25,12 +25,15 @@ public class Token {
         minus("-"),
         times("*"),
         slash("/"),
-        equal("=="),
+        not("not"), not_("not"),
+        equal("=="), equal_("eq"),
         notEqual("!="),
         greater(">"),
         greaterEqual(">="),
         less("<"),
         lessEqual("<="),
+        and("&&"), and_("and"),
+        or("||"), or_("or"),
 
         assign("="),
         if_("if");

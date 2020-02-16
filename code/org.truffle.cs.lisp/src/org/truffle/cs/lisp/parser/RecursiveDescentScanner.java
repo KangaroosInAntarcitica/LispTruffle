@@ -46,8 +46,9 @@ public final class RecursiveDescentScanner {
         Kind[] keys = {
                 Token.Kind.nil, Token.Kind.period, Token.Kind.true_, Token.Kind.false_,
                 Token.Kind.plus, Token.Kind.minus, Token.Kind.times, Token.Kind.slash,
-                Token.Kind.equal, Token.Kind.notEqual, Token.Kind.greater, Token.Kind.greaterEqual, Token.Kind.less, Token.Kind.lessEqual,
-                Token.Kind.assign, Token.Kind.if_,
+                Token.Kind.and, Token.Kind.and_, Token.Kind.or, Token.Kind.or_, Token.Kind.equal, Token.Kind.equal_, Token.Kind.not, Token.Kind.not_,
+                Token.Kind.notEqual, Token.Kind.greater, Token.Kind.greaterEqual, Token.Kind.less, Token.Kind.lessEqual,
+                Token.Kind.assign, Token.Kind.if_
         };
         setKeywords(keys);
     }
