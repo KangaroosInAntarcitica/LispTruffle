@@ -1,33 +1,28 @@
 package org.truffle.cs.lisp.nodes;
 
-import java.util.List;
-
 import com.oracle.truffle.api.CompilerDirectives;
-import com.oracle.truffle.api.TruffleException;
-import com.oracle.truffle.api.frame.FrameDescriptor;
 import com.oracle.truffle.api.frame.VirtualFrame;
-import com.oracle.truffle.api.nodes.ExplodeLoop;
 
-public abstract class LispArithmeticNode extends LispOperationNode {
+public abstract class LispArithmeticNode extends LispExpressionNode {
 	private Object accumulator;
 	
 	public abstract Object reduce(Object accumulator, Object value);
 	
 	@Override
-	@ExplodeLoop()
 	public Object execute(VirtualFrame frame) {
-		if (arguments.length > 0) {
-			accumulator = arguments[0].execute(frame);
+		Object[] arguments = frame.getArguments();
+
+		if (arguments.length > 1) {
+			accumulator = arguments[1];
 		} else {
 			CompilerDirectives.transferToInterpreter();
 			throw new Error("Operation must be have at least one argument.");
 		}
-		
-		// TODO add checks
-		for (int i = 1; i < arguments.length; i++) {
-			accumulator = reduce(accumulator, arguments[i].execute(frame));
+
+		for (int i = 2; i < arguments.length; i++) {
+			accumulator = reduce(accumulator, arguments[i]);
 		}
-		
+
 		return accumulator;
 	}
 	

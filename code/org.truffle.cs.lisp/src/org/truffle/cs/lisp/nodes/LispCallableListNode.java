@@ -1,28 +1,33 @@
 package org.truffle.cs.lisp.nodes;
 
-import java.util.Stack;
-import java.util.ArrayList;
-
-import com.oracle.truffle.api.CompilerDirectives;
-import com.oracle.truffle.api.frame.FrameDescriptor;
+import com.oracle.truffle.api.Truffle;
 import com.oracle.truffle.api.frame.VirtualFrame;
+import com.oracle.truffle.api.nodes.ExplodeLoop;
+import com.oracle.truffle.api.nodes.IndirectCallNode;
+import org.truffle.cs.lisp.types.LispCallable;
 
 public class LispCallableListNode extends LispExpressionNode {
-	@Child LispOperationNode operation;
+	@Child LispExpressionNode operation;
+	@Children LispExpressionNode[] arguments;
+	@Child IndirectCallNode callNode;
 	
-	public LispCallableListNode(LispExpressionNode operation, LispExpressionNode arguments[]) {
-		if (operation instanceof LispOperationNode){
-			this.operation = (LispOperationNode) operation;
-			this.operation.setArguments(arguments);
-		} else {
-			CompilerDirectives.transferToInterpreter();
-			if (operation == null) throw new Error("Operation cannot be nil.");
-			throw new Error(operation + " must be an operations.");
-		}
+	public LispCallableListNode(LispExpressionNode operation, LispExpressionNode[] arguments) {
+		this.operation = operation;
+		this.arguments = arguments;
+		this.callNode = Truffle.getRuntime().createIndirectCallNode();
 	}
 	
 	@Override
+    @ExplodeLoop
 	public Object execute(VirtualFrame frame) {
-		return operation.execute(frame);
+		LispCallable callable = operation.executeLispCallable(frame);
+
+		Object[] argumentValues = new Object[arguments.length + 1];
+		argumentValues[0] = callable.getFrame();
+		for (int i = 0; i < arguments.length; i++) {
+			argumentValues[i + 1] = arguments[i].execute(frame);
+		}
+
+		return callNode.call(callable.getCallTarget(), argumentValues);
 	}
 }

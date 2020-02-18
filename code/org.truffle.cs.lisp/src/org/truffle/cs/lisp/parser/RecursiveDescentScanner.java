@@ -1,11 +1,11 @@
 package org.truffle.cs.lisp.parser;
 
+import org.truffle.cs.lisp.parser.Token.Kind;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.truffle.cs.lisp.parser.Token.Kind;
 
 public final class RecursiveDescentScanner {
     protected static final char EOF = (char) -1;
@@ -42,10 +42,12 @@ public final class RecursiveDescentScanner {
         nextCh(); // read 1st char into ch, incr col to 1
 
         Kind[] keys = {
-                Token.Kind.nil,
-                Token.Kind.plus, Token.Kind.minus, Token.Kind.times, Token.Kind.slash,
-                Token.Kind.equal, Token.Kind.notEqual, Token.Kind.greater, Token.Kind.greaterEqual, Token.Kind.less, Token.Kind.lessEqual,
-                Token.Kind.assign, Token.Kind.if_,
+                // All thee are just variables now
+//                Token.Kind.nil,
+//                Token.Kind.plus, Token.Kind.minus, Token.Kind.times, Token.Kind.slash,
+//                Token.Kind.equal, Token.Kind.notEqual, Token.Kind.greater, Token.Kind.greaterEqual, Token.Kind.less, Token.Kind.lessEqual,
+//                Token.Kind.assign, Token.Kind.if_,
+                Token.Kind.define, Token.Kind.if_, Token.Kind.lambda
         };
         setKeywords(keys);
     }

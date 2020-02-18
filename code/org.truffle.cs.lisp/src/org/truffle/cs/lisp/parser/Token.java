@@ -18,19 +18,21 @@ public class Token {
         ident("__identifier__"),
         nil("nil"),
 
-		plus("+"),
-		minus("-"),
-		times("*"),
-		slash("/"),
-        equal("=="),
-        notEqual("!="),
-        greater(">"),
-        greaterEqual(">="),
-        less("<"),
-        lessEqual("<="),
-
+        define("define"),
+        lambda("lambda"),
         assign("="),
         if_("if");
+
+//		plus("+"),
+//		minus("-"),
+//		times("*"),
+//		slash("/"),
+//        equal("=="),
+//        notEqual("!="),
+//        greater(">"),
+//        greaterEqual(">="),
+//        less("<"),
+//        lessEqual("<="),
 
 //        car("car"),
 //        cdr("cdr"),
