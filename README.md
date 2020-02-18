@@ -51,3 +51,15 @@ Run `make clean`.
 This project is licensed under the [MIT License](https://choosealicense.com/licenses/mit/).
 
 © 2020 Andrii Dmytruk, Volodymyr Chernetskyi
+
+# Lisp Lambdas Implementation
+
+We also implemented the lambdas and scope support for lisp (but in another branch and didn't merge them yet).
+The branch [lambdas](https://github.com/KangaroosInAntarcitica/LispTruffle/tree/lambdas) has following syntax supported.
+
+* Opertaions: `(+ 1 2 3 (* 2 3))`
+* Defining variables: `(define a value)`
+* Lambda functions (with scopes): `(lambda arg arg)` or `(lambda (arg1, arg2) (* arg1 2 arg2))`
+* Printing: `println (+ 1 2)`
+* If: `(if 2 3 0)`
+
